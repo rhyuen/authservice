@@ -1,0 +1,22 @@
+{
+  "name": "authservice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=dev nodemon index.js"
+  },"dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "1.18.2",
+    "cookie-parser": "1.4.3",
+    "cross-env": "5.1.1",
+    "express": "4.16.2",
+    "helmet": "3.9.0",
+    "jsonwebtoken": "8.1.0",
+    "mongoose": "4.13.4",
+    "morgan": "1.9.0",
+    "nconf": "0.9.1",
+    "nodemon": "1.12.1",
+    "validator": "9.1.1"
+  }
+}
