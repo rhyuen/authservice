@@ -38,7 +38,12 @@ router.post("/login", async(req, res) => {
                 method: "POST",
                 description: "User Exists. Valid Password."
             });
-            //if true, set cookie with jwt
+            
+            //ADD COOKIE
+            //ADD JWT 
+            //ADD SCOPES OF JWT
+            //EXPIRE THE JWT
+            
         }).catch(err => {
             console.log(err);
             res.status(500).json({

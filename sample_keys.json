@@ -1,0 +1,17 @@
+{
+    "dev": {
+        "db": "",
+        "jwtSecret": "",
+        "cookieSecret": ""
+    },
+    "prod": {
+        "db": "",
+        "jwtSecret": "",
+        "cookieSecret": ""
+    },
+    "test": {
+        "db": "",
+        "jwtSecret": "",
+        "cookieSecret": ""
+    }
+}
