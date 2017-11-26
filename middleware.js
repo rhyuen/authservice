@@ -9,13 +9,12 @@ module.exports = (app) => {
     app.use(helmet());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
-    mongoose.connection.openUri(config["dev"].db)
-    // .then(data => console.log(data))
-    // .catch(err => console.log(err));
-    .once("open", () => {
-        console.log("db conn attempt")
-    })
-    .on("error", e => {
-        console.log(e);
-    });
+    mongoose.Promise = global.Promise;
+    mongoose.connection
+        .openUri(config["dev"].db)    
+        .once("open", () => {
+            console.log("db conn attempt")
+        }).on("error", e => {
+            console.log(e);
+        });
 };

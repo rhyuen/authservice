@@ -15,6 +15,13 @@ app.use((req, res, next) => {
 
 app.use("/", mainRoutes);
 
+app.use((req, res) => {
+    res.status(404).json({
+        path: "/notfound",
+        description: "page doesn't exist"
+    });
+});
+
 app.use((err, req, res, next) => {
     console.log(err);
 });
