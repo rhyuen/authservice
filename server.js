@@ -23,7 +23,19 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-    console.log(err);
+    if(process.env.NODE_ENV === "dev"){
+        console.log(err);
+        return res.status(500).json({
+            message: "Something went wrong.",
+            error: err.message,
+            usermessage: (err.usermessage) ? err.usermessage : "You didn't write anything for yourself."
+        });
+    }
+    
+    res.status(500).json({
+        message: "Something went wrong.",
+        error: err.message        
+    });
 });
 
 

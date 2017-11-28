@@ -37,7 +37,7 @@ describe("Login Route", () => {
         mongoose.disconnect();
     });
 
-    it("login", async () => {
+    it("An existing user should be able to login.", async () => {
         const res = await chai.request(server)
             .post("/login")
             .send({
@@ -68,7 +68,7 @@ describe("Signup Route", () => {
         mongoose.disconnect();
     });
 
-    it("should work", async() => {
+    it("A new user should be created.", async() => {
         const res = await chai.request(server)
             .post("/signup")
             .send({
