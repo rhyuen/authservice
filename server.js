@@ -1,5 +1,6 @@
 const express = require("express");
 const mainRoutes = require("./routes/mainroutes.js");
+const userRoutes = require("./routes/userroutes.js");
 const middleware = require("./middleware.js");
 const app = express();
 
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", mainRoutes);
+app.use("/user", userRoutes);
 
 app.use((req, res) => {
     res.status(404).json({

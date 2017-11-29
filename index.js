@@ -4,6 +4,12 @@ const mongoose = require("mongoose");
 const config = require("./config.js");
 
 
+process.on("unhandledRejection", err => {
+    console.log("unhandledRejection", err.message);
+    //send the err to the logger.
+    process.exit(1);
+});
+
 mongoose.Promise = global.Promise;
 mongoose.connection
     .openUri(config["dev"].db)    
