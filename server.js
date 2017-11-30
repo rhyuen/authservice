@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
         return res.status(500).json({
             message: "Something went wrong.",
             error: err.message,
-            usermessage: (err.usermessage) ? err.usermessage : "You didn't write anything for yourself."
+            usermessage: (err.usermessage) ? err.usermessage : "You didn't write an error message for yourself."
         });
     }
     

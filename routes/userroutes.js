@@ -3,7 +3,7 @@ const auth = require("../auth.js");
 const wrapAsync = require("../common/wrapasync");
 const User = require("../models/user.js");
 
-router.use(auth.headerAuth);
+router.use(auth.validateIdentity);
 
 router.get("/", wrapAsync(async(req, res) => {
     const users = await User.find({});

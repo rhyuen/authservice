@@ -54,7 +54,7 @@ router.post("/login", wrapAsync(async(req, res) => {
         tokenOptions);        
     
     res.cookie("authservice_token", signedToken, {
-        expires: new Date(Date.now() + 36000),
+        expires: new Date(Date.now() + 360000),
         httpOnly: true
     });
 
@@ -94,6 +94,30 @@ router.post("/signup", wrapAsync(async(req, res) => {
         }            
         throw(e);                     
     }       
+}));
+
+router.post("/forgot", wrapAsync(async(req, res) => {
+    const forgotUsername = req.body.username;
+    const result = await User.findOne({username: forgotUsername});
+    if(!result){       
+        return res.status(200).json({
+            path: "forgot",
+            method: "POST",
+            action: "Reset user credentials",
+            result: "User does not exist",
+            details: `Details for ${forgotUsername}`
+        });
+    }
+
+     //TODO: Pass username to email service.
+
+    return res.status(200).json({
+        path: "forgot",
+        method: "POST",
+        action: "Reset user credentials",
+        result: "SUCCESS",
+        details: `Details for ${forgotUsername}`
+    });
 }));
 
 module.exports = router;

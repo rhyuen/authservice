@@ -6,14 +6,12 @@ const wrapAsync = require("./common/wrapasync.js");
 
 const jwtVerify = util.promisify(jwt.verify);
 
-exports.cookieAuth = (req, res, next) => {
-    console.log(req.cookie.authservice);
-};
-
-exports.headerAuth = wrapAsync(async (req, res, next) => {
-    try{        
-        console.log(req.cookies);
-        await jwtVerify(req.headers.authorization.split(" ")[1],  config[process.env.NODE_ENV].jwtSecret);        
+exports.validateIdentity = wrapAsync(async (req, res, next) => {
+    try{                
+        const identityToValidate = req.cookies.authservice_token || req.headers.authorization.split(" ")[1];
+        // console.log(req.cookies.authservice_token);
+        // console.log(req.headers.authorization);
+        await jwtVerify(identityToValidate,  config[process.env.NODE_ENV].jwtSecret);        
         next();                        
     }catch(e){
         if(e.name === "JsonWebTokenError"){
