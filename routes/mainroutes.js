@@ -12,9 +12,20 @@ const router = express.Router();
 router.get("/", async(req, res) => {
     res.status(200).json({
         path: "/",
-        description: "root"
+        description: "root",
+        options: [
+            "POST /login",
+            "POST /signup",
+            "POST /forgot"
+        ]
     });
 });
+
+router.get("/login", wrapAsync(async(req, res) => {
+    res.status(301).send({
+        message: "login page"
+    });
+}));
 
 router.post("/login", wrapAsync(async(req, res) => {
     const loginUserName = req.body.username;
@@ -75,7 +86,7 @@ router.post("/signup", wrapAsync(async(req, res) => {
 
     try{
         const savedUser = await latestUser.save();    
-        res.status(200).json({
+        res.status(201).json({
             path: "/signup",
             method: "POST",
             action: "User Registration",

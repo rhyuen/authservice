@@ -23,8 +23,15 @@ router.get("/:username", wrapAsync(async(req, res) => {
     });
 }));
 
+//TODO: Add user details fields
+//TODO: Add user details modify route.
 
 
+router.get("/logout", wrapAsync(async(req, res) => {
+    res.status(200).json({
+        path: "logout route"
+    });
+}));
 
 
 module.exports = router;

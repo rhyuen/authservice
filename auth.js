@@ -7,12 +7,15 @@ const wrapAsync = require("./common/wrapasync.js");
 const jwtVerify = util.promisify(jwt.verify);
 
 exports.validateIdentity = wrapAsync(async (req, res, next) => {
-    try{                
-        const identityToValidate = req.cookies.authservice_token || req.headers.authorization.split(" ")[1];
-        // console.log(req.cookies.authservice_token);
-        // console.log(req.headers.authorization);
-        await jwtVerify(identityToValidate,  config[process.env.NODE_ENV].jwtSecret);        
-        next();                        
+    try{        
+        if(!req.headers.authorization){
+            const error = new Error("No authorization header.");
+            error.status = 400;
+            throw error;
+        }                
+        const identityToValidate = req.cookies.authservice_token || req.headers.authorization.split(" ")[1];               
+        await jwtVerify(identityToValidate, config[process.env.NODE_ENV].jwtSecret);               
+        return next(); 
     }catch(e){
         if(e.name === "JsonWebTokenError"){
             return res.status(401).json({
@@ -26,7 +29,8 @@ exports.validateIdentity = wrapAsync(async (req, res, next) => {
                 error: e
             });
         }
-                      
+                           
+        console.log("There was an Auth Error\n %s", e);
         return res.status(401).json({
             message: "An unexpected case for your auth happened.",
             error: e

@@ -2,3 +2,6 @@ now.json
 .git
 node_modules
 keys.json
+README.md
+sample_keys.json
+.gitignore

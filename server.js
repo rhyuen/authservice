@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("./auth.js");
 const mainRoutes = require("./routes/mainroutes.js");
 const userRoutes = require("./routes/userroutes.js");
 const middleware = require("./middleware.js");
@@ -13,6 +14,9 @@ app.use((req, res, next) => {
     });
     next();
 });
+
+app.get("/auth", auth.validateIdentity);
+
 
 app.use("/", mainRoutes);
 app.use("/user", userRoutes);
