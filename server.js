@@ -22,16 +22,18 @@ app.get("/auth", auth.validateIdentity);
 app.use("/", mainRoutes);
 app.use("/user", userRoutes);
 
-app.use((req, res) => {
+app.use((req, res) => {    
     res.status(404).json({
-        path: "/notfound",
-        description: "page doesn't exist"
+        path: `${req.originalUrl}`,
+        description: "The page you're look for doesn't exist."
     });
 });
 
 app.use((err, req, res, next) => {
     if(process.env.NODE_ENV === "dev"){
         console.log(err);
+
+        //TODO: LOG to a file somewhere.
         return res.status(500).json({
             message: "Something went wrong.",
             error: err.message,
@@ -39,6 +41,8 @@ app.use((err, req, res, next) => {
         });
     }
     
+
+    //TODO: Log to a file somewhere and give the user a vague message.
     res.status(500).json({
         message: "Something went wrong.",
         error: err.message        

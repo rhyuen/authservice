@@ -144,6 +144,9 @@ exports.handleForgotPassword = wrapAsync(async(req, res) => {
     }
 
      //TODO: Pass username to email service.
+     //TODO: Send email with JWT that lasts for five minutes
+     //TODO: Direct the email to screen that lets that user change their pw.
+     //TODO: update model with new pw.
 
     return res.status(200).json({
         path: "forgot",
@@ -152,4 +155,9 @@ exports.handleForgotPassword = wrapAsync(async(req, res) => {
         result: "SUCCESS",
         details: `Details for ${forgotUsername}`
     });
+});
+
+exports.handleLogout = wrapAsync(async(req, res) => {
+    //TODO: set cookie to an expiry that is an hour ago.
+    //TODO: redirect to home or login page.
 });

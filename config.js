@@ -9,9 +9,9 @@ module.exports = {
         "cookieSecret": process.env.cookieSecret || nconf.get("dev:cookieSecret")
     },
     "prod": {
-        "db": "",
-        "jwtSecret": "",
-        "cookieSecret": ""
+        "db": process.env.db || nconf.get("prod:db"),
+        "jwtSecret": process.env.jwtSecret || nconf.get("prod:jwtSecret"),
+        "cookieSecret": process.env.cookieSecret || nconf.get("prod:jwtSecret")
     },
     "test": {
         "db": "",
