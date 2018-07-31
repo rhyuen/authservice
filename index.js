@@ -17,7 +17,7 @@ process.on("uncaughtException", err => {
 
 mongoose.Promise = global.Promise;
 mongoose.connection
-    .openUri(config["dev"].db)    
+    .openUri(config.getSecrets().db)    
     .once("open", () => {
         console.log("DB conn attempt open.")
     }).on("error", e => {

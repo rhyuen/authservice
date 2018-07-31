@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=prod nodemon index.js",
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
+    "deploy": "now --public && now alias",
     "test": "mocha test/*.spec.js --exit --reporter list"
   },
   "dependencies": {

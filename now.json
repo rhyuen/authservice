@@ -1,3 +1,16 @@
 {
-    
+    "name": "ryauth-alone",
+    "alias": [
+        "ryauth-alone"
+    ],
+    "env": {
+        "db": "@prod_auth_db",
+        "jwtSecret": "@jwt_secret",
+        "cookieSecret": "@cookie_secret"
+    },
+    "engines": {
+        "node": "^10"
+    },
+    "public": true,
+    "type": "npm"
 }

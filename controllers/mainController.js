@@ -75,7 +75,7 @@ const generateJWT = async(username) => {
     const signToken = util.promisify(jwt.sign);
     const newlyMintedToken = await signToken(
         tokenPayload, 
-        config[process.env.NODE_ENV].jwtSecret, 
+        config.getSecrets().jwtSecret, 
         tokenOptions
     );
     return newlyMintedToken;

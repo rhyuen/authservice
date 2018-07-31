@@ -15,11 +15,10 @@ exports.validateIdentity = wrapAsync(async (req, res, next) => {
         
         const identityToValidate = req.cookies["authservice_token"] || req.headers.authorization.split(" ")[1];
         console.log(identityToValidate);
-        const validationResult = await jwtVerify(identityToValidate, config[process.env.NODE_ENV].jwtSecret).catch(e => {
+        const validationResult = await jwtVerify(identityToValidate, config.getSecrets().jwtSecret).catch(e => {
             console.error("JWT token verification failed. Error: %s", e);            
         });                       
-        console.log(validationResult);
-        console.log("success");
+        console.log(validationResult);        
         return next(); 
     }catch(e){
         console.log("There was an Auth Error\n %s", e);

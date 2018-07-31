@@ -13,7 +13,7 @@ module.exports = (app) => {
     app.use(helmet());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));    
-    app.use(cookieParser(config["dev"].cookieSecret, {
+    app.use(cookieParser(config.getSecrets().cookieSecret, {
         httpOnly: true,
         maxAge: 3600
     }));   

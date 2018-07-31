@@ -24,6 +24,7 @@ app.use("/user", userRoutes);
 
 app.use((req, res) => {    
     res.status(404).json({
+        date: new Date().toLocaleString(),
         path: `${req.originalUrl}`,
         description: "The page you're look for doesn't exist."
     });
@@ -35,6 +36,7 @@ app.use((err, req, res, next) => {
 
         //TODO: LOG to a file somewhere.
         return res.status(500).json({
+            date: new Date().toLocaleString(),
             message: "Something went wrong.",
             error: err.message,
             usermessage: (err.usermessage) ? err.usermessage : "You didn't write an error message for yourself."
@@ -44,6 +46,7 @@ app.use((err, req, res, next) => {
 
     //TODO: Log to a file somewhere and give the user a vague message.
     res.status(500).json({
+        date: new Date().toLocaleString(),
         message: "Something went wrong.",
         error: err.message        
     });
