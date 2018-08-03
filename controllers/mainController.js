@@ -135,8 +135,8 @@ exports.handleForgotPassword = wrapAsync(async(req, res) => {
     const result = await User.findOne({username: forgotUsername});
     if(!result){       
         return res.status(200).json({
-            path: "forgot",
-            method: "POST",
+            path: req.path,
+            method: req.method,
             action: "Reset user credentials",
             result: "User does not exist",
             details: `Details for ${forgotUsername}`
@@ -149,15 +149,23 @@ exports.handleForgotPassword = wrapAsync(async(req, res) => {
      //TODO: update model with new pw.
 
     return res.status(200).json({
-        path: "forgot",
-        method: "POST",
+        path: req.path,
+        method: req.method,
         action: "Reset user credentials",
         result: "SUCCESS",
         details: `Details for ${forgotUsername}`
     });
 });
 
-exports.handleLogout = wrapAsync(async(req, res) => {
-    //TODO: set cookie to an expiry that is an hour ago.
-    //TODO: redirect to home or login page.
+exports.handleLogout = wrapAsync(async(req, res) => {    
+    res.clearCookie("authservice_token", {
+        expires: new Date(Date.now() - 3600)
+    });
+    console.log("cookie cleared. %s", res.cookie("authservice_token"));
+    console.log(res.cookie);
+    // res.cookie("authservice_token", {        
+    //     expires: new Date(Date.now() - 360000),
+    //     httpOnly: true
+    // });
+    res.redirect("/");
 });
