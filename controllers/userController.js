@@ -18,16 +18,13 @@ exports.getNamedUser = wrapAsync(async(req, res) => {
     });
 });
 
-exports.handleLogout = wrapAsync(async(req, res) => {
-    // res.clearCookie("authservice_token", {
-    //     expires: new Date(Date.now() - 3600)
-    // });
+exports.handleLogout = wrapAsync(async(req, res) => {    
     console.log("cookie cleared. %s", res.cookie("authservice_token"));
     console.log(res.cookie);
-    // res.cookie("authservice_token", {        
-    //     expires: new Date(Date.now() - 360000),
-    //     httpOnly: true
-    // });
+    res.cookie("authservice_token", {        
+        expires: new Date(Date.now() - 360000),
+        httpOnly: true
+    });
     res.redirect("/");
 });
 

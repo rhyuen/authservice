@@ -18,7 +18,6 @@ app.use((req, res, next) => {
 
 app.get("/auth", auth.validateIdentity);
 
-
 app.use("/", mainRoutes);
 app.use("/user", userRoutes);
 

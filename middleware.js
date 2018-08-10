@@ -18,3 +18,15 @@ module.exports = (app) => {
         maxAge: 3600
     }));   
 };
+
+// function isEnvironmentSecure(){
+//     const cookieOptions = {
+//         httpOnly: true, 
+//         maxAge: 3600
+//     };
+//     if(process.env.NODE_ENV === "dev"){
+//         return cookieOptions;
+//     }else{
+//         return Object.assign(cookieOptions, {secure: true});        
+//     }
+// }

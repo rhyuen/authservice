@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 const util = require("util");
 const config = require("./config.js");
@@ -22,22 +21,22 @@ exports.validateIdentity = wrapAsync(async (req, res, next) => {
         req.cookies.details = validationResult;       
         return next(); 
     }catch(e){
-        console.log("There was an Auth Error\n %s", e);
-        if(e.name === "JsonWebTokenError"){
-            return res.status(401).json({
-                message: "Wrong signature for your token.",
-                error: e
-            });
-        }
-        if(e.name === "TokenExpiredError"){
-            return res.status(401).json({
-                message: "You need to sign in or your token is expired.",
-                error: e
-            });
-        }           
         if(process.env.NODE_ENV === "prod"){
             res.redirect("/login");
         }else{
+            console.log("There was an Auth Error\n %s", e);
+            if(e.name === "JsonWebTokenError"){
+                return res.status(401).json({
+                    message: "Wrong signature for your token.",
+                    error: e
+                });
+            }
+            if(e.name === "TokenExpiredError"){
+                return res.status(401).json({
+                    message: "You need to sign in or your token is expired.",
+                    error: e
+                });
+            }          
             return res.status(401).json({
                 message: "An unexpected case for your auth happened.",
                 devMessage: e.message,
