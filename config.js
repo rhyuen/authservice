@@ -6,8 +6,7 @@ function getNodeEnv(){
     const currentEnv = process.env.NODE_ENV;
     if(envTypes.includes(currentEnv) === -1){
         throw new Error(`NODE_ENV value of '${process.env.NODE_ENV}' is not one of 'dev', 'prod' or 'test'.`);
-    }
-    console.log("NODE_ENV for config is '%s'.", currentEnv);
+    }    
 }
 exports.extServices = () => {
     const devSvcURLS = {
@@ -25,7 +24,7 @@ exports.extServices = () => {
     };    
 
     return process.env.NODE_ENV === "dev" ? devSvcURLS : prodSvcURLS;
-} 
+}; 
 
 exports.getSecrets = () => {
     const envTypes = ["dev", "prod", "test"];
@@ -40,5 +39,5 @@ exports.getSecrets = () => {
         "jwtSecret": process.env.jwtSecret || nconf.get(`${currentEnv}:jwtSecret`),
         "cookieSecret": process.env.cookieSecret || nconf.get(`${currentEnv}:cookieSecret`)
     };  
-}
+};
 

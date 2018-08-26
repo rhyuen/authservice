@@ -4,25 +4,15 @@ const util = require("util");
 const uuid = require("uuid");
 const User = require("../models/user.js");
 const wrapAsync = require("../common/wrapasync.js");
+const respond = require("../common/normalizedRes.js");
 const config = require("../config.js");
 
 exports.index = wrapAsync(async(req, res) => {
-    res.status(200).json({
-        path: "/",
-        description: "root",
-        options: [
-            "POST /login",
-            "POST /signup",
-            "POST /forgot"
-        ]
-    });
+    return respond(req, res, 200, "Home Page/Route", "OPTIONS:  /login[POST] /signup[POST] /forgot[GET]");
 });
 
 exports.login =  wrapAsync(async(req, res) => {
-    res.status(200).json({
-        title: "login page",
-        message: "{user: 'usernametologin', password: 'passwordtexttologin'}"
-    });
+    return respond(req, res, 200, "LoginPage", "{'username':'usernameToLogin', 'password':'loginpassword'}");    
 });
 
 exports.processLogin = wrapAsync(async(req, res) => {    
@@ -30,20 +20,12 @@ exports.processLogin = wrapAsync(async(req, res) => {
     const validCredentials = await isCredentialsValid(req.body.username, req.body.password);
        
     const foundUser = await User.findOne({username: validCredentials.username});        
-    if(!foundUser){                
-        return res.status(200).json({
-            path: "login",
-            method: "POST",
-            description: `${validCredentials.username} does not exist.`
-        });
+    if(!foundUser){    
+        return respond(req, res, 404, "Logging in", `${validCredentials.username} does not exist.`);      
     }
 
     if(!foundUser.validPassword(validCredentials.password)){
-        return res.status(200).json({
-            path: "login",
-            method: "POST",
-            description: `${validCredentials.username} exists, invalid password.`
-        });
+        return respond(req, res, 401, "Logging in", `${validCredentials.username} exists, invalid password.`);       
     }
 
     const signedToken = await generateJWT(validCredentials.username);
@@ -53,12 +35,13 @@ exports.processLogin = wrapAsync(async(req, res) => {
         httpOnly: true
     });
 
-    return res.status(200).json({
-        path: "login",
-        method: "POST",
-        description: "User Exists. Valid Password.",
-        token: signedToken
-    });                                                                                 
+    //TODO: Redirect User to User.html Page and load personal User Data.
+    console.log(req.headers["user-agent"]);
+    if(process.env["NODE_ENV"] === "prod"){
+        return res.status(302).redirect("https://royuroot.now.sh/user.html");
+    }else{
+        return res.status(302).redirect("/user/");
+    }    
 });
 
 const generateJWT = async(username) => {
@@ -93,11 +76,14 @@ const isCredentialsValid = async (username, password) => {
         password: password
     }, schema);
 
-    if (error){        
+    if(error){        
         throw new Error("New User Validation Failed. Error: " + error);
     }
 
-    return {username: value.username, password: value.password};
+    return {
+        username: value.username, 
+        password: value.password
+    };
 };
 
 exports.handleSignup = wrapAsync(async(req, res) => {       
@@ -109,22 +95,10 @@ exports.handleSignup = wrapAsync(async(req, res) => {
 
     try{
         const savedUser = await latestUser.save();    
-        res.status(201).json({
-            path: "/signup",
-            method: "POST",
-            action: "User Registration",
-            result: `Success`,
-            details: savedUser
-        });    
+        return respond(req, res, 201, "User Registration", `${savedUser} created successfully.`);       
     }catch(e){           
-        if(e.code === 11000){                
-            return res.status(500).json({
-                path: "/signup",
-                method: "POST",
-                action: "User Registration",
-                result: "Failure",
-                details: "Username already exists."
-            });
+        if(e.code === 11000){ 
+            return respond(req, res, 500, "User Registration Failure", `'${latestUser.username}' already exists.`);          
         }            
         throw(e);                     
     }       
@@ -134,27 +108,15 @@ exports.handleForgotPassword = wrapAsync(async(req, res) => {
     const forgotUsername = req.body.username;
     const result = await User.findOne({username: forgotUsername});
     if(!result){       
-        return res.status(200).json({
-            path: req.path,
-            method: req.method,
-            action: "Reset user credentials",
-            result: "User does not exist",
-            details: `Details for ${forgotUsername}`
-        });
+        return respond(req, res, 404, "Reset User Credentials", `${forgotUsername} does not exist.`);        
     }
 
      //TODO: Pass username to email service.
      //TODO: Send email with JWT that lasts for five minutes
      //TODO: Direct the email to screen that lets that user change their pw.
      //TODO: update model with new pw.
-
-    return res.status(200).json({
-        path: req.path,
-        method: req.method,
-        action: "Reset user credentials",
-        result: "SUCCESS",
-        details: `Details for ${forgotUsername}`
-    });
+ 
+    return respond(req, res, 200, "Reset User Credentials", `Details for ${forgotUsername} reset.`);
 });
 
 exports.handleLogout = wrapAsync(async(req, res) => {    
@@ -167,5 +129,5 @@ exports.handleLogout = wrapAsync(async(req, res) => {
     //     expires: new Date(Date.now() - 360000),
     //     httpOnly: true
     // });
-    res.redirect("/");
+    res.status(302).redirect("/");
 });
