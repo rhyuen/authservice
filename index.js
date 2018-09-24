@@ -1,32 +1,28 @@
 const server = require("./server.js");
 const PORT = process.env.PORT || 5789;
 const mongoose = require("mongoose");
+const logger = require("./common/logger.js");
 const config = require("./config.js");
 
 
-process.on("unhandledRejection", err => {
-    console.log("unhandledRejection", err.message);
-    //send the err to the logger.
-    process.exit(1);
-});
-
 process.on("uncaughtException", err => {
-    console.log("Uncaught Exception %s", err);
+    logger.error(`Uncaught Exception: ${err}`);
     process.exit(1);
 });
 
 mongoose.Promise = global.Promise;
 mongoose.connection
-    .openUri(config.getSecrets().db)    
+    .openUri(config.getSecrets().db, {
+        useNewUrlParser: true
+    })
     .once("open", () => {
-        console.log("DB conn attempt open.")
+        logger.info("DB conn attempt open.")
     }).on("error", e => {
-        console.log("DB conn ERROR.")
-        console.log(e);
+        logger.error(`MONGODB ERROR: ${e}`);
     });
 server.listen(PORT, (err) => {
-    if(err){
+    if (err) {
         return console.log(err);
-    }    
+    }
     console.log("Auth Service| NODE_ENV: %s | PORT: %s", process.env.NODE_ENV, PORT);
 });

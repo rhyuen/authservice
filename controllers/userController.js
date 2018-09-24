@@ -4,10 +4,7 @@ const User = require("../models/user.js");
 
 exports.getLoggedIn = wrapAsync(async(req, res) => {    
     const self = await User.find({username: req.cookies.details.username});
-    res.status(200).json({
-        date: new Date(),
-        self
-    });
+    return respond(req, res, 200, "Get Self User (Authorized)", "Getting Self User Data", self);    
 });
 
 exports.getNamedUser = wrapAsync(async(req, res) => {

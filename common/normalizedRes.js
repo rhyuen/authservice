@@ -1,4 +1,4 @@
-module.exports = (req, res, statusCode, attemptedAction="Canned Message", customMessage = "Another Canned Message") => {
+module.exports = (req, res, statusCode, attemptedAction="Canned Message", customMessage = "Another Canned Message", data = []) => {
     if(statusCode === 500){
         //TODO: Some logging stuff
         res.status(statusCode).json({        
@@ -7,7 +7,8 @@ module.exports = (req, res, statusCode, attemptedAction="Canned Message", custom
             path: req.path,
             method: req.method,
             action: attemptedAction,
-            message: customMessage        
+            message: customMessage,
+            data: data    
         });
     }else{
         res.status(statusCode).json({        
